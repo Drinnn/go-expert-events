@@ -50,6 +50,16 @@ func (suite *EventDispatcherTestSuite) TestEventDispatcher_Register_Failure_Same
 	suite.Equal(1, len(suite.eventDispatcher.Handlers[suite.eventOne.GetName()]))
 }
 
+func (suite *EventDispatcherTestSuite) TestEventDispatcher_Clear_Success() {
+	suite.eventDispatcher.Register(suite.eventOne.GetName(), &suite.handlerOne)
+	suite.eventDispatcher.Register(suite.eventOne.GetName(), &suite.handlerTwo)
+	suite.eventDispatcher.Register(suite.eventTwo.GetName(), &suite.handlerThree)
+
+	suite.eventDispatcher.Clear()
+
+	suite.Equal(0, len(suite.eventDispatcher.Handlers))
+}
+
 func TestSuite(t *testing.T) {
 	suite.Run(t, new(EventDispatcherTestSuite))
 }
