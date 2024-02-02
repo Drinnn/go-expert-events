@@ -5,23 +5,23 @@ import "errors"
 var ErrHandlerAlreadyRegistered = errors.New("handler already registered")
 
 type EventDispatcher struct {
-	handlers map[string][]EventHandlerInterface
+	Handlers map[string][]EventHandlerInterface
 }
 
 func NewEventDispatcher() *EventDispatcher {
 	return &EventDispatcher{
-		handlers: make(map[string][]EventHandlerInterface),
+		Handlers: make(map[string][]EventHandlerInterface),
 	}
 }
 
 func (e *EventDispatcher) Register(eventName string, handler EventHandlerInterface) error {
-	if _, ok := e.handlers[eventName]; ok {
-		for _, handler := range e.handlers[eventName] {
-			if handler == handler {
+	if _, ok := e.Handlers[eventName]; ok {
+		for _, registeredHandler := range e.Handlers[eventName] {
+			if registeredHandler == handler {
 				return ErrHandlerAlreadyRegistered
 			}
 		}
 	}
-	e.handlers[eventName] = append(e.handlers[eventName], handler)
+	e.Handlers[eventName] = append(e.Handlers[eventName], handler)
 	return nil
 }
