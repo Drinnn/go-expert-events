@@ -26,6 +26,14 @@ func (e *EventDispatcher) Register(eventName string, handler EventHandlerInterfa
 	return nil
 }
 
+func (e *EventDispatcher) Dispatch(event EventInterface) {
+	if _, ok := e.Handlers[event.GetName()]; ok {
+		for _, handler := range e.Handlers[event.GetName()] {
+			handler.Handle(event)
+		}
+	}
+}
+
 func (e *EventDispatcher) Has(eventName string, handler EventHandlerInterface) bool {
 	if _, ok := e.Handlers[eventName]; ok {
 		for _, registeredHandler := range e.Handlers[eventName] {

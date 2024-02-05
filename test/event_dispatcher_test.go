@@ -72,6 +72,16 @@ func (suite *EventDispatcherTestSuite) TestEventDispatcher_Has_Success() {
 	assert.False(suite.T(), suite.eventDispatcher.Has(suite.eventTwo.GetName(), &suite.handlerOne))
 }
 
+func (suite *EventDispatcherTestSuite) TestEventDispatcher_Dispatch_Success() {
+	suite.handlerOne.Mock.On("Handle", &suite.eventOne)
+
+	suite.eventDispatcher.Register(suite.eventOne.GetName(), &suite.handlerOne)
+	suite.eventDispatcher.Dispatch(&suite.eventOne)
+
+	suite.handlerOne.Mock.AssertExpectations(suite.T())
+	suite.handlerOne.Mock.AssertNumberOfCalls(suite.T(), "Handle", 1)
+}
+
 func TestSuite(t *testing.T) {
 	suite.Run(t, new(EventDispatcherTestSuite))
 }
