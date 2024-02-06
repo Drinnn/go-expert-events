@@ -82,6 +82,16 @@ func (suite *EventDispatcherTestSuite) TestEventDispatcher_Dispatch_Success() {
 	suite.handlerOne.Mock.AssertNumberOfCalls(suite.T(), "Handle", 1)
 }
 
+func (suite *EventDispatcherTestSuite) TestEventDispatcher_Remove_Success() {
+	suite.eventDispatcher.Register(suite.eventOne.GetName(), &suite.handlerOne)
+	suite.eventDispatcher.Register(suite.eventOne.GetName(), &suite.handlerTwo)
+
+	suite.eventDispatcher.Remove(suite.eventOne.GetName(), &suite.handlerOne)
+
+	suite.Equal(1, len(suite.eventDispatcher.Handlers[suite.eventOne.GetName()]))
+	assert.True(suite.T(), suite.eventDispatcher.Has(suite.eventOne.GetName(), &suite.handlerTwo))
+}
+
 func TestSuite(t *testing.T) {
 	suite.Run(t, new(EventDispatcherTestSuite))
 }

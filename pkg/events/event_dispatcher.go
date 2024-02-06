@@ -34,6 +34,16 @@ func (e *EventDispatcher) Dispatch(event EventInterface) {
 	}
 }
 
+func (e *EventDispatcher) Remove(eventName string, handler EventHandlerInterface) {
+	if _, ok := e.Handlers[eventName]; ok {
+		for i, registeredHandler := range e.Handlers[eventName] {
+			if registeredHandler == handler {
+				e.Handlers[eventName] = append(e.Handlers[eventName][:i], e.Handlers[eventName][i+1:]...)
+			}
+		}
+	}
+}
+
 func (e *EventDispatcher) Has(eventName string, handler EventHandlerInterface) bool {
 	if _, ok := e.Handlers[eventName]; ok {
 		for _, registeredHandler := range e.Handlers[eventName] {
